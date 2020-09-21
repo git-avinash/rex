@@ -37,21 +37,24 @@ class RexWrapper(object):
         )
 
     def _inject(self) -> None:
-        print(">> Injecting parasite")
-
         with open("parasite.js", "r") as script:
             self.driver.execute_script(script.read())
 
-        print(">> Listning Now...")
+        print(">> Listning now...")
 
-    def login(self, mail_adderss, mail_password, mail_qr_to, mail_qr=False,):
+    def login(self, mail_adderss, mail_password, mail_qr_to, mail_qr_d=False,):
         self.driver.get(self._URL)
-        # wait_for(self.driver, self._SELECTORS["qr_code"])
+        wait_for(self.driver, self._SELECTORS["qr_code"])
 
-        if mail_qr:
+        if mail_qr_d:
+            print("Grabbing QR SS in 1sec")
+            time.sleep(1)
+
             self.driver.save_screenshot(self._QR_FILE_NAME)
             mail_qr(mail_adderss, mail_password,
                     mail_qr_to, self._QR_FILE_NAME)
+
+            print("QR has been mailed!")
 
         wait_for(self.driver, self._SELECTORS["main_page"])
 

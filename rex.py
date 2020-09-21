@@ -304,7 +304,7 @@ BOT.login(
     EMAIL_ADDRESS,
     EMAIL_PASS,
     MAIL_TO,
-    mail_qr=master_debug_mode,
+    mail_qr_d=master_debug_mode,
 )
 
 while BOT_LOOP:
