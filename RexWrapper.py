@@ -2,7 +2,7 @@ import time
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-from helpers import wait_for, mail_qr
+from helpers import wait_for
 
 
 class RexWrapper(object):
@@ -11,7 +11,7 @@ class RexWrapper(object):
     _QR_FILE_NAME = "qr_code.png"
 
     _SELECTORS = {
-        "qr_code": "//canvas",
+        "qr_code": "//*[@data-ref]",
         "main_page": "//*[contains(text(), 'Keep your phone connected')]",
     }
 
@@ -42,19 +42,13 @@ class RexWrapper(object):
 
         print(">> Listning now...")
 
-    def login(self, mail_adderss, mail_password, mail_qr_to, mail_qr_d=False,):
+    def login(self):
         self.driver.get(self._URL)
         wait_for(self.driver, self._SELECTORS["qr_code"])
 
-        if mail_qr_d:
-            print("Grabbing QR SS in 1sec")
-            time.sleep(1)
-
-            self.driver.save_screenshot(self._QR_FILE_NAME)
-            mail_qr(mail_adderss, mail_password,
-                    mail_qr_to, self._QR_FILE_NAME)
-
-            print("QR has been mailed!")
+        qr_code = self.driver.find_element_by_xpath(self._SELECTORS["qr_code"])
+        code = qr_code.get_attribute("data-ref")
+        print(f">> Generate QR with this: \n >> {code}")
 
         wait_for(self.driver, self._SELECTORS["main_page"])
 

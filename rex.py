@@ -300,12 +300,7 @@ BOT = RexWrapper(
     options=ARGS,
 )
 
-BOT.login(
-    EMAIL_ADDRESS,
-    EMAIL_PASS,
-    MAIL_TO,
-    mail_qr_d=master_debug_mode,
-)
+BOT.login()
 
 while BOT_LOOP:
     time.sleep(1)
