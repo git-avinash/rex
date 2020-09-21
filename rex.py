@@ -107,7 +107,6 @@ def handle_chat_call(data):
 
 def handle_group_call(data):
     parsed_message = data["messageContent"].split(" ")
-    print(parsed_message)
 
     if is_trigger(parsed_message[0]):
 
