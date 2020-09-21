@@ -31,7 +31,7 @@ help_rex_doc = """
 
 🍀Help by contributing to my development
 👉Simple clone repo, add feature and make a pull request
-🔗
+🔗https://github.com/git-avinash/rex
 """
 
 about_me_doc = """
