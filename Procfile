@@ -1,1 +1,1 @@
-web: rex.py
+worker: rex.py
