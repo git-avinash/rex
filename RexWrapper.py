@@ -1,8 +1,10 @@
 import time
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-
-from helpers import wait_for
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import TimeoutException
 
 
 class RexWrapper(object):
@@ -36,21 +38,45 @@ class RexWrapper(object):
             options=self._options,
         )
 
+    def wait_for(self, webdriver, web_element: str, delay=60) -> bool:
+        try:
+            WebDriverWait(webdriver, delay).until(
+                EC.presence_of_element_located((By.XPATH, web_element)))
+            return True
+        except TimeoutException as e:
+            return False
+
     def _inject(self) -> None:
         with open("parasite.js", "r") as script:
             self.driver.execute_script(script.read())
 
-        print(">> Listning now...")
+        print(">>> Listning now...")
 
     def login(self):
+        load_qr = None
+
+        while load_qr == None:
+            mode_param = str(input(
+                "Start bot in which mode?\n1. Auth Mode (Use when Cookies are not saved)\n2. Load Cookies (Use when Cookies are saved)\n"))
+            if mode_param == "1":
+                load_qr = True
+            elif mode_param == "2":
+                load_qr = False
+            else:
+                print(">>> Enter a valid entry")
+
         self.driver.get(self._URL)
-        wait_for(self.driver, self._SELECTORS["qr_code"])
 
-        qr_code = self.driver.find_element_by_xpath(self._SELECTORS["qr_code"])
-        code = qr_code.get_attribute("data-ref")
-        print(f">> Generate QR with this: \n >> {code}")
+        if load_qr == True:
+            self.wait_for(self.driver, self._SELECTORS["qr_code"])
 
-        wait_for(self.driver, self._SELECTORS["main_page"])
+            qr_code = self.driver.find_element_by_xpath(
+                self._SELECTORS["qr_code"])
+            code = qr_code.get_attribute("data-ref")
+            print(
+                f">>> Generate QR from https://www.the-qrcode-generator.com/ with this code:\n>> {code}")
+
+        self.wait_for(self.driver, self._SELECTORS["main_page"])
 
         time.sleep(1)
         self._inject()

@@ -1,4 +1,4 @@
 /chrome-cookies
-# /creds.json
+/creds.json
 /__pycache__
 /test.py
