@@ -3,16 +3,17 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 
 def get_sheet_data(sheet_name):
-    scope = ["https://spreadsheets.google.com/feeds",
-             'https://www.googleapis.com/auth/spreadsheets',
-             "https://www.googleapis.com/auth/drive.file",
-             "https://www.googleapis.com/auth/drive",
-             ]
+    scope = [
+        "https://spreadsheets.google.com/feeds",
+        'https://www.googleapis.com/auth/spreadsheets',
+        "https://www.googleapis.com/auth/drive.file",
+        "https://www.googleapis.com/auth/drive",
+    ]
 
     # creds.json is not Included in the repo
     # Please create your own key
     creds = ServiceAccountCredentials.from_json_keyfile_name(
-        "creds.json", scope)
+        "api_creds.json", scope)
 
     client = gspread.authorize(creds)
 

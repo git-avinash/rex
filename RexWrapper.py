@@ -1,6 +1,7 @@
 import time
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.options import Options as C_options
+from selenium.webdriver.firefox.options import Options as F_options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
@@ -22,21 +23,39 @@ class RexWrapper(object):
         headless=False,
         executable_path=None,
         options=None,
+        browser="chrome",
         binary_location=None,
     ):
-        self._options = Options()
-        if binary_location is not None:
-            self._options.binary_location = binary_location
-        if headless:
-            self._options.add_argument("--headless")
-        if options is not None:
-            for option in options:
-                self._options.add_argument(option)
 
-        self.driver: ChromeDriver = webdriver.Chrome(
-            executable_path=executable_path,
-            options=self._options,
-        )
+        if browser == "chrome":
+            self._options = C_options()
+            if binary_location is not None:
+                self._options.binary_location = binary_location
+            if headless:
+                self._options.add_argument("--headless")
+            if options is not None:
+                for option in options:
+                    self._options.add_argument(option)
+
+            self.driver: ChromeDriver = webdriver.Chrome(
+                executable_path=executable_path,
+                options=self._options,
+            )
+
+        if browser == "firefox":
+            self._options = F_options()
+            if binary_location is not None:
+                self._options.binary_location = binary_location
+            if headless:
+                self._options.add_argument("--headless")
+            if options is not None:
+                for option in options:
+                    self._options.add_argument(option)
+
+            self.driver: FireFoxDriver = webdriver.Firefox(
+                executable_path=executable_path,
+                options=self._options,
+            )
 
     def wait_for(self, webdriver, web_element: str, delay=60) -> bool:
         try:
@@ -53,28 +72,29 @@ class RexWrapper(object):
         print(">>> Listning now...")
 
     def login(self):
-        load_qr = None
+        # Switch to True when building
+        load_qr = True
 
-        while load_qr == None:
-            mode_param = str(input(
-                "Start bot in which mode?\n1. Auth Mode (Use when Cookies are not saved)\n2. Load Cookies (Use when Cookies are saved)\n"))
-            if mode_param == "1":
-                load_qr = True
-            elif mode_param == "2":
-                load_qr = False
-            else:
-                print(">>> Enter a valid entry")
+        # while load_qr is None:
+        #     mode_param = str(input(
+        #         "Start bot in which mode?\n1. Auth Mode (Use when Cookies are not saved)\n2. Load Cookies (Use when Cookies are saved)\n"))
+        #     if mode_param == "1":
+        #         load_qr = True
+        #     elif mode_param == "2":
+        #         load_qr = False
+        #     else:
+        #         print(">>> Enter a valid entry")
 
         self.driver.get(self._URL)
 
-        if load_qr == True:
+        if load_qr is True:
             self.wait_for(self.driver, self._SELECTORS["qr_code"])
 
             qr_code = self.driver.find_element_by_xpath(
                 self._SELECTORS["qr_code"])
             code = qr_code.get_attribute("data-ref")
             print(
-                f">>> Generate QR from https://www.the-qrcode-generator.com/ with this code:\n>> {code}")
+                f">>> Generate QR from https://www.the-qrcode-generator.com/ with this code:\n>>> {code}")
 
         self.wait_for(self.driver, self._SELECTORS["main_page"])
 

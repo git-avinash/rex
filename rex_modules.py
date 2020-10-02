@@ -1,5 +1,4 @@
 from api_calls import get_sheet_data
-# from helpers import index_in_list
 from stringDoc import *
 from rex_state import RexState
 

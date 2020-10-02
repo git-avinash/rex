@@ -1,4 +1,3 @@
-# from helpers import is_trigger
 from rex_state import RexState
 from rex_modules import *
 
