@@ -2,6 +2,7 @@ import os
 import time
 
 from RexWrapper import RexWrapper
+from CleverBotWrapper import CleverBotWrapper
 from api_calls import get_sheet_data
 from rex_state import RexState
 from message_handler import chat_message_handler, group_message_handler
@@ -29,33 +30,52 @@ master_debug_mode = True
 # Loading permissions
 RexState.set_permissions()
 
-# Bot Logic
-BOT = RexWrapper(
+# Instantiating Rex
+print(">>> Instantiating Rex...")
+rex = RexWrapper(
     headless=master_debug_mode,
     executable_path=WEBDRIVER_PATH,
     browser="firefox",
     options=ARGS,
 )
 
-BOT.login()
+rex.login()
+
+# Instantiating Clever Bot
+print(">>> Instantiating CleverBot...")
+clever_bot = CleverBotWrapper(
+    headless=master_debug_mode,
+    executable_path=WEBDRIVER_PATH,
+    browser="firefox",
+    options=ARGS,
+)
+
+clever_bot.start()
+
+# Setting state for drivers
+RexState.chat_bot_driver = rex
+RexState.clever_bot_driver = clever_bot
+
+print(">>> Everything's good! Now Listning...")
 
 while RexState.BOT_LOOP:
     time.sleep(1)
-    messages = BOT.get_unreads()
+    messages = RexState.chat_bot_driver.get_unreads()
     if not messages:
         continue
     else:
-        data = BOT.filter_message_object(messages)
+        data = RexState.chat_bot_driver.filter_message_object(messages)
         print(data)
 
         if data["messageKind"] == "chat":
-            chat_message_handler(BOT, data)
+            chat_message_handler(data)
 
         if data["messageKind"] == "group":
-            group_message_handler(BOT, data)
+            group_message_handler(data)
 
 
-BOT.quit_rex()
+RexState.chat_bot_driver.quit_rex()
+RexState.clever_bot_driver.quit_clever_bot()
 
 
 # {

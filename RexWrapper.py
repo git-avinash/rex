@@ -69,8 +69,6 @@ class RexWrapper(object):
         with open("parasite.js", "r") as script:
             self.driver.execute_script(script.read())
 
-        print(">>> Listning now...")
-
     def login(self):
         # Switch to True when building
         load_qr = True
@@ -100,6 +98,8 @@ class RexWrapper(object):
 
         time.sleep(1)
         self._inject()
+
+        print(">>> Rex is Ready!")
 
     def get_unreads(self) -> dict:
         return self.driver.execute_script("return window.WAPI.getUnreadMessages(false,false,false);")

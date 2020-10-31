@@ -9,36 +9,33 @@ def index_in_list(list, index):
 
 
 # Modules
-def guide(BOT, data):
-    BOT.send_message(data["messageid"], guide_data_doc)
+def guide(data):
+    RexState.chat_bot_driver.send_message(data["messageid"], guide_data_doc)
 
 
-def about_me(BOT, data):
-    BOT.send_message(data["messageid"], about_me_doc)
+def about_me(data):
+    RexState.chat_bot_driver.send_message(data["messageid"], about_me_doc)
 
 
-def help_rex(BOT, data):
-    BOT.send_message(data["messageid"], help_rex_doc)
+def help_rex(data):
+    RexState.chat_bot_driver.send_message(data["messageid"], help_rex_doc)
 
 
-def update_data(BOT, data):
-    BOT.send_message(data["messageid"], update_data_doc)
+def update_data(data):
+    RexState.chat_bot_driver.send_message(data["messageid"], update_data_doc)
 
 
-def no_command_exists(BOT, data, parsed_message):
-    BOT.send_message(
-        data["messageid"], f"You sure {' '.join(parsed_message[1:])} is the right command? 🤔 \n Use help command if you are lost 😉")
-
-
-def echo(BOT, data, parsed_message):
+def echo(data, parsed_message):
     if index_in_list(parsed_message, 2):
-        BOT.send_message(data["messageid"], " ".join(parsed_message[2:]))
+        RexState.chat_bot_driver.send_message(
+            data["messageid"], " ".join(parsed_message[2:]))
     else:
-        BOT.send_message(data["messageid"], "Beep Boop 🤖")
+        RexState.chat_bot_driver.send_message(data["messageid"], "Beep Boop 🤖")
 
 
-def send_timetable(BOT, data):
-    BOT.send_message(data["messageid"], "Fetching TimeTable 📫")
+def send_timetable(data):
+    RexState.chat_bot_driver.send_message(
+        data["messageid"], "Fetching TimeTable 📫")
 
     sheet_data = get_sheet_data("FYBSC CS - TimeTable")
 
@@ -71,11 +68,12 @@ def send_timetable(BOT, data):
                 tt.append(time_lecture_obj[1])
                 tt.append("\n")
 
-    BOT.send_message(data["messageid"], " ". join(tt))
+    RexState.chat_bot_driver.send_message(data["messageid"], " ". join(tt))
 
 
-def send_google_classroom_codes(BOT, data):
-    BOT.send_message(data["messageid"], "Fetching Google Classroom Codes 📫")
+def send_google_classroom_codes(data):
+    RexState.chat_bot_driver.send_message(
+        data["messageid"], "Fetching Google Classroom Codes 📫")
 
     sheet_data = get_sheet_data("FYBSC CS - GoogleClassroomCodes")
 
@@ -104,11 +102,12 @@ def send_google_classroom_codes(BOT, data):
         gcc.append(gcc_obj["Code"])
         gcc.append("\n")
 
-    BOT.send_message(data["messageid"], " ". join(gcc))
+    RexState.chat_bot_driver.send_message(data["messageid"], " ". join(gcc))
 
 
-def send_meeting_links(BOT, data):
-    BOT.send_message(data["messageid"], "Fetching Meeting Links 📫")
+def send_meeting_links(data):
+    RexState.chat_bot_driver.send_message(
+        data["messageid"], "Fetching Meeting Links 📫")
 
     sheet_data = get_sheet_data("FYBSC CS - MeetingLinks")
 
@@ -136,14 +135,20 @@ def send_meeting_links(BOT, data):
         ml.append(ml_obj["Code"])
         ml.append("\n")
 
-    BOT.send_message(data["messageid"], " ".join(ml))
+    RexState.chat_bot_driver.send_message(data["messageid"], " ".join(ml))
 
 
-def quit_rex(BOT, data):
+def natural_message(data, parsed_message):
+    response = RexState.clever_bot_driver.get_response(
+        " ".join(parsed_message[1:]))
+    RexState.chat_bot_driver.send_message(data["messageid"], response)
+
+
+def quit_rex(data):
     if RexState.is_admin(data["messageAuthorid"]):
-        BOT.send_message(
+        RexState.chat_bot_driver.send_message(
             data["messageid"], "Time to sleep 🥱")
-        RexState.set_bot_loop(False)
+        RexState.BOT_LOOP = False
     else:
-        BOT.send_message(
-            data["messageid"], "You can't access to this command!")
+        RexState.chat_bot_driver.send_message(
+            data["messageid"], "You can't access this command!")

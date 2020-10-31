@@ -5,10 +5,8 @@ class RexState():
     BOT_LOOP = True
     admins = []
     triggers = []
-
-    @classmethod
-    def set_bot_loop(cls, state: bool):
-        cls.BOT_LOOP = state
+    chat_bot_driver = None
+    clever_bot_driver = None
 
     @classmethod
     def set_permissions(cls):
