@@ -20,7 +20,7 @@ guide_data_doc = """
 ▪ *about*
 👉A little about me
 
-▪ *about <Query>*
+▪ *search <Query>*
 👉Search for anything with Rex
 
 ▪ *<Anything>*

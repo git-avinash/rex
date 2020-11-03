@@ -25,7 +25,7 @@ ARGS = [
 
 # Master Debugger Switch
 # Should be set to True if Hosting elsewhere
-master_debug_mode = False
+master_debug_mode = True
 
 # Loading permissions
 RexState.set_permissions()
