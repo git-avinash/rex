@@ -20,6 +20,12 @@ guide_data_doc = """
 ▪ *about*
 👉A little about me
 
+▪ *about <Query>*
+👉Search for anything with Rex
+
+▪ *<Anything>*
+👉To casually talk with Rex
+
 *Run these command by simply mentioning me and then adding a command*
 """
 

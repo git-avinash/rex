@@ -40,6 +40,9 @@ def group_message_handler(data):
                 elif parsed_message[1] == "ml":
                     send_meeting_links(data)
 
+                elif parsed_message[1] == "search":
+                    search_for(data, parsed_message)
+
                 elif parsed_message[1] == "close":
                     quit_rex(data)
 
