@@ -2,10 +2,39 @@ import time
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as C_options
 from selenium.webdriver.firefox.options import Options as F_options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.common.exceptions import TimeoutException
+from helpers.helpers import wait_for
+
+
+def filter_message_object(message_object: dict) -> dict:
+    message_content = None
+    message_author_id = None
+
+    for message in message_object:
+        if message['kind'] == "chat":
+
+            for b in message["messages"]:
+                message_content = b['body']
+
+            return {
+                "messageKind": message['kind'],
+                "messageid": message['id'],
+                "messageFrom": message['contact']['formattedName'],
+                "messageContent": message_content,
+            }
+
+        if message['kind'] == "group":
+
+            for b in message["messages"]:
+                message_content = b['body']
+                message_author_id = b['author']
+
+            return {
+                "messageKind": message['kind'],
+                "messageid": message['id'],
+                "messageFrom": message['contact']['formattedName'],
+                "messageContent": message_content,
+                "messageAuthorid": message_author_id,
+            }
 
 
 class RexWrapper(object):
@@ -37,7 +66,7 @@ class RexWrapper(object):
                 for option in options:
                     self._options.add_argument(option)
 
-            self.driver: ChromeDriver = webdriver.Chrome(
+            self.driver = webdriver.Chrome(
                 executable_path=executable_path,
                 options=self._options,
             )
@@ -52,21 +81,13 @@ class RexWrapper(object):
                 for option in options:
                     self._options.add_argument(option)
 
-            self.driver: FireFoxDriver = webdriver.Firefox(
+            self.driver = webdriver.Firefox(
                 executable_path=executable_path,
                 options=self._options,
             )
 
-    def wait_for(self, webdriver, web_element: str, delay=60) -> bool:
-        try:
-            WebDriverWait(webdriver, delay).until(
-                EC.presence_of_element_located((By.XPATH, web_element)))
-            return True
-        except TimeoutException as e:
-            return False
-
     def _inject(self) -> None:
-        with open("parasite.js", "r") as script:
+        with open("../javascript/parasite.js", "r") as script:
             self.driver.execute_script(script.read())
 
     def login(self):
@@ -86,7 +107,7 @@ class RexWrapper(object):
         self.driver.get(self._URL)
 
         if load_qr is True:
-            self.wait_for(self.driver, self._SELECTORS["qr_code"])
+            wait_for(self.driver, self._SELECTORS["qr_code"])
 
             qr_code = self.driver.find_element_by_xpath(
                 self._SELECTORS["qr_code"])
@@ -94,7 +115,7 @@ class RexWrapper(object):
             print(
                 f">>> Generate QR from https://www.the-qrcode-generator.com/ with this code:\n>>> {code}")
 
-        self.wait_for(self.driver, self._SELECTORS["main_page"])
+        wait_for(self.driver, self._SELECTORS["main_page"])
 
         time.sleep(1)
         self._inject()
@@ -109,34 +130,6 @@ class RexWrapper(object):
 
         self.driver.execute_script(
             f"window.WAPI.sendMessage('{id}',`{message}`);")
-
-    def filter_message_object(self, message_object: dict) -> dict:
-        for message in message_object:
-            if message['kind'] == "chat":
-
-                for b in message["messages"]:
-                    message_content = b['body']
-
-                return {
-                    "messageKind": message['kind'],
-                    "messageid": message['id'],
-                    "messageFrom": message['contact']['formattedName'],
-                    "messageContent": message_content,
-                }
-
-            if message['kind'] == "group":
-
-                for b in message["messages"]:
-                    message_content = b['body']
-                    message_authorid = b['author']
-
-                return {
-                    "messageKind": message['kind'],
-                    "messageid": message['id'],
-                    "messageFrom": message['contact']['formattedName'],
-                    "messageContent": message_content,
-                    "messageAuthorid": message_authorid,
-                }
 
     def quit_rex(self) -> None:
         self.driver.close()

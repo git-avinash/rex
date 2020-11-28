@@ -3,10 +3,8 @@ import time
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as C_options
 from selenium.webdriver.firefox.options import Options as F_options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.common.exceptions import TimeoutException
+
+from helpers.helpers import wait_for
 
 
 class CleverBotWrapper(object):
@@ -40,7 +38,7 @@ class CleverBotWrapper(object):
                 for option in options:
                     self._options.add_argument(option)
 
-            self.driver: ChromeDriver = webdriver.Chrome(
+            self.driver = webdriver.Chrome(
                 executable_path=executable_path,
                 options=self._options,
             )
@@ -55,24 +53,16 @@ class CleverBotWrapper(object):
                 for option in options:
                     self._options.add_argument(option)
 
-            self.driver: FireFoxDriver = webdriver.Firefox(
+            self.driver = webdriver.Firefox(
                 executable_path=executable_path,
                 options=self._options,
             )
-
-    def _wait_for(self, webdriver, web_element: str, delay=60) -> bool:
-        try:
-            WebDriverWait(webdriver, delay).until(
-                EC.presence_of_element_located((By.XPATH, web_element)))
-            return True
-        except TimeoutException as e:
-            return False
 
     def start(self):
         self.driver.get(self._URL)
 
         print(">>> Waiting for terms")
-        self._wait_for(self.driver, self._SELECTORS["terms_confirm"])
+        wait_for(self.driver, self._SELECTORS["terms_confirm"])
 
         print(">>> Terms found now clicking")
         terms_button = self.driver.find_element_by_xpath(
@@ -80,7 +70,7 @@ class CleverBotWrapper(object):
         terms_button.click()
 
         print(">>> Waiting for main page")
-        self._wait_for(self.driver, self._SELECTORS["response"])
+        wait_for(self.driver, self._SELECTORS["response"])
 
         print(">>> Clever Bot is Ready!")
 

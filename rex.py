@@ -1,21 +1,21 @@
 import os
 import time
 
-from RexWrapper import RexWrapper
-from CleverBotWrapper import CleverBotWrapper
-from api_calls import get_sheet_data
-from rex_state import RexState
-from message_handler import chat_message_handler, group_message_handler
-
+from web_wrappers.RexWrapper import RexWrapper, filter_message_object
+from web_wrappers.CleverBotWrapper import CleverBotWrapper
+from states.rex_state import RexState
+from message_handlers.group_chat import group_message_handler
+from message_handlers.personal_chat import chat_message_handler
 
 # Loading Driver and Binaries if hosted
-# WEBDRIVER_PATH = os.environ.get("CHROMEDRIVER_PATH")
-WEBDRIVER_PATH = os.environ.get("GECKODRIVER_PATH")
+# WEB_DRIVER_PATH = os.environ.get("CHROMEDRIVER_PATH")
+WEB_DRIVER_PATH = os.environ.get("GECKODRIVER_PATH")
 
 
 # Chrome Options
 ARGS = [
-    "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36",
+    "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 "
+    "Safari/537.36",
     "--disable-dev-shm-usage",
     "--no-sandbox",
 ]
@@ -25,7 +25,7 @@ ARGS = [
 
 # Master Debugger Switch
 # Should be set to True if Hosting elsewhere
-master_debug_mode = False
+master_debug_mode = True
 
 # Loading permissions
 RexState.set_permissions()
@@ -34,7 +34,7 @@ RexState.set_permissions()
 print(">>> Instantiating Rex...")
 rex = RexWrapper(
     headless=master_debug_mode,
-    executable_path=WEBDRIVER_PATH,
+    executable_path=WEB_DRIVER_PATH,
     browser="firefox",
     options=ARGS,
 )
@@ -45,7 +45,7 @@ rex.login()
 print(">>> Instantiating CleverBot...")
 clever_bot = CleverBotWrapper(
     headless=master_debug_mode,
-    executable_path=WEBDRIVER_PATH,
+    executable_path=WEB_DRIVER_PATH,
     browser="firefox",
     options=ARGS,
 )
@@ -64,7 +64,7 @@ while RexState.BOT_LOOP:
     if not messages:
         continue
     else:
-        data = RexState.chat_bot_driver.filter_message_object(messages)
+        data = filter_message_object(messages)
         print(data)
 
         if data["messageKind"] == "chat":

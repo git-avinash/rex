@@ -1,10 +1,15 @@
-from rex_state import RexState
-from rex_modules import *
-
-
-def chat_message_handler(data):
-    RexState.chat_bot_driver.send_message(
-        data["messageid"], "DM listner has been implented, DM Avinash if you have any idea to use this feature 😉")
+from modules.quit_rex import quit_rex
+from modules.search_for import search_for
+from modules.send_natural_message import natural_message
+from modules.send_meeting_links import send_meeting_links
+from modules.send_google_classroom_codes import send_google_classroom_codes
+from modules.send_timetable import send_timetable
+from modules.send_echo import echo
+from modules.send_update_data import update_data
+from modules.send_help_rex import help_rex
+from modules.send_about_me import about_me
+from modules.send_guide import send_guide
+from states.rex_state import RexState
 
 
 def group_message_handler(data):
@@ -17,7 +22,7 @@ def group_message_handler(data):
             if data["messageid"] == "918600806187-1593763834@g.us" or data["messageid"] == "918600806187-1600503245@g.us":
 
                 if parsed_message[1] == "help":
-                    guide(data)
+                    send_guide(data)
 
                 elif parsed_message[1] == "about":
                     about_me(data)

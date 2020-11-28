@@ -11,9 +11,9 @@ def get_sheet_data(sheet_name):
     ]
 
     # creds.json is not Included in the repo
-    # Please create your own key
+    # Please create your own key and move it to data dir
     creds = ServiceAccountCredentials.from_json_keyfile_name(
-        "api_creds.json", scope)
+        "../data/api_creds.json", scope)
 
     client = gspread.authorize(creds)
 

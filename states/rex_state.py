@@ -1,7 +1,7 @@
 import json
 
 
-class RexState():
+class RexState:
     BOT_LOOP = True
     admins = []
     triggers = []
@@ -10,7 +10,7 @@ class RexState():
 
     @classmethod
     def set_permissions(cls):
-        with open("rex_permissions.json", "r") as bp:
+        with open("../data/rex_permissions.json", "r") as bp:
             permission = json.load(bp)
             cls.admins = permission["admins"]
             cls.triggers = permission["triggers"]
