@@ -87,7 +87,7 @@ class RexWrapper(object):
             )
 
     def _inject(self) -> None:
-        with open("../javascript/parasite.js", "r") as script:
+        with open(".close/javascript/parasite.js", "r") as script:
             self.driver.execute_script(script.read())
 
     def login(self):

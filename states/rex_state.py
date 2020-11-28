@@ -10,7 +10,7 @@ class RexState:
 
     @classmethod
     def set_permissions(cls):
-        with open("../data/rex_permissions.json", "r") as bp:
+        with open("./data/rex_permissions.json", "r") as bp:
             permission = json.load(bp)
             cls.admins = permission["admins"]
             cls.triggers = permission["triggers"]
