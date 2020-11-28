@@ -30,8 +30,6 @@ guide_data_doc = """
 """
 
 help_rex_doc = """
-*Let's not be self centred, Let's Create Something Together✨*
-
 🍀Help by updating TimeTables, and other data
 👉run updata command to know more
 
@@ -43,7 +41,7 @@ help_rex_doc = """
 about_me_doc = """
 *Crafted with ❤ by Avinash*
 -Instagram: avinashsah_
--Contact: +918600806187
+-Mail: mail.avinashsah@gmail.com
 
 Copyright 2020 Avinash S Sah
 SPDX-License-Identifier: Apache-2.0
@@ -51,8 +49,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 """
 
 update_data_doc = """
-*You are Awesome😊!*
-
 ▪Update TimeTable
 🔗https://bit.ly/2ZVoTTq
 
@@ -62,5 +58,5 @@ update_data_doc = """
 ▪Update Google ClassRoom Data:
 🔗https://bit.ly/2RI84qs
 
-*Inorder to get access, DM your mail ID to Avinash*
+*Only mods can access these!*
 """

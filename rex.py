@@ -1,3 +1,9 @@
+"""
+Author: Avinash S Sah
+Mail: mail.avinashsah@gmail.com
+Version: 2.0
+"""
+
 import os
 import time
 
