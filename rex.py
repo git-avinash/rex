@@ -26,6 +26,7 @@ ARGS = [
 # Should be set to True if Hosting elsewhere
 master_debug_mode = True
 
+
 if __name__ == "__main__":
     # Loading permissions
     RexState.set_permissions()
