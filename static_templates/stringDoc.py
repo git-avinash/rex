@@ -40,8 +40,10 @@ help_rex_doc = """
 
 about_me_doc = """
 *Crafted with ❤ by Avinash*
--Instagram: avinashsah_
--Mail: mail.avinashsah@gmail.com
++Version: 2.0
++Contacts:
+  -Instagram: avinashsah_
+  -Mail: mail.avinashsah@gmail.com
 
 Copyright 2020 Avinash S Sah
 SPDX-License-Identifier: Apache-2.0
